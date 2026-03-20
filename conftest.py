@@ -2,6 +2,10 @@ import pytest
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from pages.login_page import LoginPage
 
 VALID_USERNAME = "standard_user"
 VALID_PASSWORD = "secret_sauce"
@@ -28,10 +32,13 @@ def driver():
 
 @pytest.fixture
 def login_user(driver, base_url):
-    from pages.login_page import LoginPage
     login = LoginPage(driver)
     login.open(base_url)
     login.login(VALID_USERNAME, VALID_PASSWORD)
+    WebDriverWait(driver, 10).until(
+        EC.url_contains("inventory.html"),
+        message="Login no redirigió a inventory — verifica credenciales o estado del sitio"
+    )
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)

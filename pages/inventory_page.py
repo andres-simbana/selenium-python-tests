@@ -37,4 +37,4 @@ class InventoryPage:
             return 0
 
     def go_to_cart(self):
-        self.driver.find_element(*self._CART_LINK).click()
+        self.wait.until(EC.element_to_be_clickable(self._CART_LINK)).click()
